@@ -1,30 +1,26 @@
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello Dogs!");
+app.MapGet("/", () => "Hello World-2!");
 
-app.MapGet("/doggycare/add", (int num1, int num2) => dogAdd(num1, num2));
-// /doggycare?num1=5&num2=8
-
-app.MapGet("/doggycare/Subtract", (int num1, int num2) => dogSubtract(num1, num2));
-// /doggycare/dogs?num1=5&num2=8
-
-app.MapGet("/doggycare/dogs", (int num1, int num2) => Extra (num1, num2));
-// /doggycare/dogs?num1=5&num2=8
+// Endpoint som tar emot två bokstäver som query-parametrar
+app.MapGet("/letters", (string L1, string L2) =>
+{
+    int num1 = GetLetterPosition(L1);
+    int num2 = GetLetterPosition(L2);
+    int sum = num1 + num2;
+    
+    return $"Bokstäver: {L1} ({num1}), {L2} ({num2}) → Summan: {sum}";
+});
 
 app.Run();
 
-string dogAdd(int num1, int num2)
+// Metod för att beräkna en bokstavs position i alfabetet
+int GetLetterPosition(string letter)
 {
-    return $"Summan av {num1} och {num2} är: {num1 + num2}";
-}
-
-string dogSubtract(int num1, int num2)
-{
-    return $"Differensen av {num1} och {num2} är: {num1 - num2}";
-}
-
-string Extra(int num1, int num2)
-{
-    return $"Differensen av {num1} och {num2} är: {num1 - num2}";
+    if (!string.IsNullOrEmpty(letter) && char.IsLetter(letter[0]))
+    {
+        return char.ToUpper(letter[0]) - 'A' + 1;
+    }
+    return 0; // Returnera 0 om input är ogiltig
 }
